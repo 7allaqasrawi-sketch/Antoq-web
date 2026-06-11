@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أنطق – تعلّم النطق باللعب</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-light: #c8e6a0;
+      --green-mid:   #7dc142;
+      --green-dark:  #4a8c1c;
+      --yellow:      #f5c518;
+      --yellow-warm: #f0a500;
+      --blue:        #2b7cc1;
+      --blue-light:  #5bbcf5;
+      --orange:      #f07b2a;
+      --white:       #ffffff;
+      --text-dark:   #1e3a10;
+      --text-body:   #2d4a1a;
+      --bubble-bg:   #f0f9e4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background: var(--bubble-bg);
+      color: var(--text-body);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      box-shadow: 0 2px 16px rgba(74,140,28,.12);
+      position: sticky; top: 0; z-index: 100;
+      padding: 0 6vw;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 72px;
+    }
+    .nav-logo {
+      font-size: 2rem; font-weight: 900;
+      color: var(--blue);
+      letter-spacing: -1px;
+    }
+    .nav-logo span { color: var(--green-mid); }
+    nav ul {
+      list-style: none;
+      display: flex; gap: 2rem;
+    }
+    nav ul a {
+      text-decoration: none;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--text-dark);
+      position: relative; padding-bottom: 4px;
+      transition: color .2s;
+    }
+    nav ul a::after {
+      content: '';
+      position: absolute; bottom: 0; right: 0;
+      width: 0; height: 3px;
+      background: var(--green-mid);
+      border-radius: 2px;
+      transition: width .25s;
+    }
+    nav ul a:hover { color: var(--green-dark); }
+    nav ul a:hover::after { width: 100%; }
+
+    /* ── HERO ── */
+    #home {
+      min-height: 92vh;
+      background: radial-gradient(ellipse at 60% 40%, #d6f0a8 0%, #a8db60 55%, #6bb82e 100%);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 3rem;
+      padding: 5rem 8vw 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    #home::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='30' cy='30' r='3' fill='%23ffffff22'/%3E%3C/svg%3E") repeat;
+    }
+    .hero-text { position: relative; z-index: 1; }
+    .hero-badge {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--text-dark);
+      font-size: .85rem; font-weight: 800;
+      padding: .35rem 1.1rem;
+      border-radius: 50px;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 3px 10px rgba(245,197,24,.5);
+      letter-spacing: .5px;
+    }
+    .hero-text h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 900;
+      color: var(--blue);
+      line-height: 1.1;
+      text-shadow: 2px 4px 0 rgba(43,124,193,.15);
+      margin-bottom: .6rem;
+    }
+    .hero-text h1 .accent { color: var(--white); }
+    .hero-text p {
+      font-size: 1.2rem; font-weight: 500;
+      color: var(--text-dark);
+      max-width: 480px;
+      line-height: 1.75;
+      margin-bottom: 2rem;
+    }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1.05rem; font-weight: 800;
+      border: none; cursor: pointer;
+      padding: .85rem 2rem;
+      border-radius: 50px;
+      box-shadow: 0 6px 20px rgba(43,124,193,.4);
+      transition: transform .15s, box-shadow .15s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(43,124,193,.5); }
+    .btn-secondary {
+      background: var(--white);
+      color: var(--blue);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1.05rem; font-weight: 800;
+      border: 2.5px solid var(--blue); cursor: pointer;
+      padding: .85rem 2rem;
+      border-radius: 50px;
+      transition: background .15s, color .15s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-secondary:hover { background: var(--blue); color: #fff; }
+    .hero-visual {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; align-items: flex-end;
+    }
+    .hero-logo-wrap {
+      width: min(420px, 90%);
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,.18));
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50%       { transform: translateY(-14px); }
+    }
+
+    /* floating bubbles */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: .25;
+      animation: bubbleUp 6s ease-in infinite;
+    }
+    @keyframes bubbleUp {
+      0%   { transform: translateY(0) scale(1); opacity: .25; }
+      100% { transform: translateY(-120px) scale(1.4); opacity: 0; }
+    }
+    .b1 { width:60px; height:60px; background:var(--yellow); bottom:10%; left:10%; animation-delay:0s; }
+    .b2 { width:40px; height:40px; background:var(--blue-light); bottom:25%; left:30%; animation-delay:2s; }
+    .b3 { width:80px; height:80px; background:var(--orange); bottom:5%; right:20%; animation-delay:1s; }
+    .b4 { width:30px; height:30px; background:var(--white); bottom:40%; right:8%; animation-delay:3s; }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 5rem 8vw; }
+    .section-eyebrow {
+      font-size: .8rem; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--green-dark);
+      margin-bottom: .5rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900; color: var(--blue);
+      margin-bottom: 1rem; line-height: 1.2;
+    }
+    .section-lead {
+      font-size: 1.1rem; font-weight: 400;
+      color: var(--text-body);
+      max-width: 620px; line-height: 1.8;
+      margin-bottom: 3rem;
+    }
+
+    /* ── FEATURES ── */
+    #features { background: var(--white); }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--bubble-bg);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      border: 2px solid transparent;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: -30px; left: -30px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      opacity: .12;
+    }
+    .feature-card:nth-child(1)::before { background: var(--blue); }
+    .feature-card:nth-child(2)::before { background: var(--orange); }
+    .feature-card:nth-child(3)::before { background: var(--yellow); }
+    .feature-card:nth-child(4)::before { background: var(--green-mid); }
+    .feature-card:nth-child(5)::before { background: var(--blue-light); }
+    .feature-card:hover {
+      border-color: var(--green-mid);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(125,193,66,.25);
+    }
+    .feat-icon {
+      font-size: 2.4rem; margin-bottom: 1rem;
+      display: block;
+    }
+    .feature-card h3 {
+      font-size: 1.15rem; font-weight: 800;
+      color: var(--blue); margin-bottom: .5rem;
+    }
+    .feature-card p {
+      font-size: .95rem; line-height: 1.7; color: var(--text-body);
+    }
+
+    /* ── TECH STRIP ── */
+    #tech {
+      background: linear-gradient(135deg, var(--blue) 0%, #1a5a99 100%);
+      color: #fff;
+      text-align: center;
+      padding: 3.5rem 8vw;
+    }
+    #tech .section-title { color: #fff; }
+    #tech .section-lead { color: rgba(255,255,255,.8); margin: 0 auto 2.5rem; }
+    .tech-pills {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem;
+    }
+    .tech-pill {
+      background: rgba(255,255,255,.12);
+      border: 1.5px solid rgba(255,255,255,.25);
+      color: #fff;
+      font-family: 'Tajawal', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      padding: .55rem 1.4rem;
+      border-radius: 50px;
+      backdrop-filter: blur(6px);
+      transition: background .2s;
+    }
+    .tech-pill:hover { background: rgba(255,255,255,.22); }
+
+    /* ── ABOUT ── */
+    #about { background: var(--bubble-bg); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-visual {
+      background: linear-gradient(135deg, #c8e6a0, #a8db60);
+      border-radius: 28px;
+      padding: 3rem 2rem;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(125,193,66,.3);
+    }
+    .about-visual .big-emoji { font-size: 5rem; }
+    .about-visual h3 {
+      font-size: 1.4rem; font-weight: 900;
+      color: var(--blue); margin-top: 1rem;
+    }
+    .about-visual p {
+      font-size: .95rem; color: var(--text-dark);
+      margin-top: .5rem; line-height: 1.7;
+    }
+    .about-text .section-lead { margin-bottom: 1.5rem; }
+    .stat-row {
+      display: flex; gap: 2rem; margin-top: 2rem; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-size: 2.4rem; font-weight: 900; color: var(--green-dark);
+      display: block; line-height: 1;
+    }
+    .stat-label { font-size: .85rem; font-weight: 600; color: var(--text-body); margin-top: .25rem; }
+
+    /* ── DOWNLOAD ── */
+    #download {
+      background: linear-gradient(135deg, #f0f9e4 0%, #d6f0a8 100%);
+      text-align: center;
+    }
+    #download .section-lead { margin: 0 auto 2.5rem; }
+    .download-card-wrap {
+      display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .download-card {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      max-width: 300px; width: 100%;
+      box-shadow: 0 8px 32px rgba(0,0,0,.10);
+      border: 2.5px solid transparent;
+      transition: border-color .2s, transform .2s;
+    }
+    .download-card:hover { border-color: var(--green-mid); transform: translateY(-4px); }
+    .dl-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+    .download-card h3 {
+      font-size: 1.2rem; font-weight: 800; color: var(--blue);
+      margin-bottom: .5rem;
+    }
+    .download-card p {
+      font-size: .9rem; color: var(--text-body); line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .btn-dl {
+      display: inline-block;
+      background: var(--green-mid);
+      color: #fff;
+      font-family: 'Tajawal', sans-serif;
+      font-weight: 800; font-size: 1rem;
+      padding: .75rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      border: none; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(125,193,66,.4);
+      transition: background .15s, transform .15s;
+    }
+    .btn-dl:hover { background: var(--green-dark); transform: translateY(-2px); }
+    .qr-hint {
+      display: inline-block;
+      background: rgba(43,124,193,.08);
+      border: 1.5px dashed var(--blue);
+      border-radius: 16px;
+      padding: 1.2rem 2.5rem;
+      font-size: .95rem; color: var(--blue); font-weight: 600;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255,255,255,.7);
+      text-align: center;
+      padding: 2rem 8vw;
+      font-size: .9rem; font-weight: 400;
+    }
+    footer strong { color: #fff; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      #home { grid-template-columns: 1fr; text-align: center; padding: 3rem 6vw; }
+      .hero-text p { margin-left: auto; margin-right: auto; }
+      .hero-ctas { justify-content: center; }
+      .about-grid { grid-template-columns: 1fr; }
+      .stat-row { justify-content: center; }
+      nav ul { gap: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">أن<span>طق</span></div>
+  <ul>
+    <li><a href="#home">الرئيسية</a></li>
+    <li><a href="#about">من نحن</a></li>
+    <li><a href="#download">التحميل</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="home">
+  <div class="hero-text">
+    <div class="hero-badge">🎓 تطبيق تعليمي تفاعلي للأطفال</div>
+    <h1>تعلّم النطق<br/><span class="accent">باللعب!</span></h1>
+    <p>
+      أنطق هو تطبيق ممتع يساعد طفلك على تعلّم الحروف العربية ونطقها بشكل صحيح من خلال ألعاب تفاعلية، فيديوهات تعليمية، وواقع معزز مدهش.
+    </p>
+    <div class="hero-ctas">
+      <a href="#download" class="btn-primary">📲 حمّل التطبيق</a>
+      <a href="#about" class="btn-secondary">تعرّف علينا أكثر</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img class="hero-logo-wrap" src="logo2.png" alt="شعار أنطق" />
+  </div>
+
+  <div class="bubble b1"></div>
+  <div class="bubble b2"></div>
+  <div class="bubble b3"></div>
+  <div class="bubble b4"></div>
+</section>
+
+<!-- ── FEATURES ── -->
+<section id="features">
+  <div class="section-eyebrow">ميزات التطبيق</div>
+  <h2 class="section-title">كل ما يحتاجه طفلك لتعلّم النطق</h2>
+  <p class="section-lead">خمس وحدات تعليمية مصمّمة خصيصاً لجعل رحلة التعلم ممتعة وفعّالة.</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feat-icon">🎬</span>
+      <h3>فيديوهات تعليمية</h3>
+      <p>مقاطع مرئية واضحة تشرح نطق الحروف والكلمات العربية خطوة بخطوة.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feat-icon">🎤</span>
+      <h3>اسمع وكرر</h3>
+      <p>لعبة تعتمد تقنية التعرف على الكلام — يسمع الطفل ويكرر ويحصل على تقييم فوري.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feat-icon">🖼️</span>
+      <h3>اختر الصورة الصحيحة</h3>
+      <p>لعبة بصرية تربط الحرف بالصورة المناسبة وتعزّز الحفظ بطريقة ذكية.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feat-icon">🔤</span>
+      <h3>رتّب الحروف</h3>
+      <p>تحدٍّ ممتع لترتيب الحروف لتكوين الكلمة الصحيحة، يقوّي مهارة التهجئة.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feat-icon">🕶️</span>
+      <h3>كتاب الواقع المعزز</h3>
+      <p>نماذج ثلاثية الأبعاد تخرج من الصفحة مع أصوات تعليمية — تجربة لا تُنسى!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── TECH ── -->
+<section id="tech">
+  <div class="section-eyebrow" style="color:rgba(255,255,255,.6)">التقنيات المستخدمة</div>
+  <h2 class="section-title">مبني بأحدث التقنيات</h2>
+  <p class="section-lead">جمعنا أقوى الأدوات لنضمن تجربة سلسة وآمنة وجذابة.</p>
+  <div class="tech-pills">
+    <span class="tech-pill">🎮 Unity Engine</span>
+    <span class="tech-pill">💻 C#</span>
+    <span class="tech-pill">🎙️ Whisper – التعرف على الكلام</span>
+    <span class="tech-pill">🥽 Vuforia AR</span>
+    <span class="tech-pill">🧠 تقنيات الوسائط المتعددة</span>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual">
+      <div class="big-emoji">🌟</div>
+      <h3>هدفنا</h3>
+      <p>
+        نؤمن أن كل طفل يستحق بيئة تعليمية تجعله يحب اللغة العربية ويتقن نطقها منذ الصغر — بطريقة ممتعة وبدون ضغط.
+      </p>
+      <div class="stat-row" style="justify-content:center;margin-top:1.5rem;">
+        <div class="stat-item">
+          <span class="stat-num">5</span>
+          <span class="stat-label">وحدات تعليمية</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">3D</span>
+          <span class="stat-label">واقع معزز</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">AI</span>
+          <span class="stat-label">تعرف على الكلام</span>
+        </div>
+      </div>
+    </div>
+    <div class="about-text">
+      <div class="section-eyebrow">من نحن</div>
+      <h2 class="section-title">قصة مشروع أنطق</h2>
+      <p class="section-lead">
+        وُلد مشروع "أنطق" من رغبة حقيقية في سد الفجوة بين التعليم التقليدي والتكنولوجيا الحديثة. رأينا كيف يكافح بعض الأطفال في تعلّم النطق الصحيح للحروف العربية، فقرّرنا أن نصنع الحل.
+      </p>
+      <p style="font-size:1rem;line-height:1.85;color:var(--text-body);">
+        يجمع التطبيق بين الفيديوهات التعليمية والألعاب التفاعلية وتقنية الواقع المعزز لتوفير بيئة تعليمية متكاملة. اعتمدنا على مكتبة Whisper للتعرف على الكلام ومنصة Vuforia لتطوير تجربة الواقع المعزز، مع نماذج ثلاثية الأبعاد تجعل التعلم تجربة مدهشة حقيقية.
+      </p>
+      <p style="font-size:1rem;line-height:1.85;color:var(--text-body);margin-top:1rem;">
+        أثبتت نتائج الاختبار نجاح التطبيق في تحقيق أهدافه التعليمية، وتوفير تجربة تفاعلية تساعد الأطفال على تحسين مهارات النطق والتواصل اللغوي بطريقة حديثة ومبهجة.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── DOWNLOAD ── -->
+<section id="download">
+  <div class="section-eyebrow">التحميل</div>
+  <h2 class="section-title">حمّل أنطق الآن</h2>
+  <p class="section-lead">
+    التطبيق متاح على أندرويد — أضف البريد الإلكتروني أو رابط المتجر هنا عند الإطلاق الرسمي.
+  </p>
+  <div class="download-card-wrap">
+    <div class="download-card">
+      <span class="dl-icon">🤖</span>
+      <h3>أندرويد</h3>
+      <p>متوافق مع أجهزة أندرويد التي تدعم الواقع المعزز لتجربة كاملة وممتعة.</p>
+      <a href="#" class="btn-dl">📥 تحميل APK</a>
+    </div>
+    <div class="download-card">
+      <span class="dl-icon">🏪</span>
+      <h3>Google Play</h3>
+      <p>سيكون التطبيق قريباً على متجر Google Play — ترقّب الإطلاق الرسمي!</p>
+      <a href="#" class="btn-dl" style="background:var(--blue);">🔔 أخبرني عند الإطلاق</a>
+    </div>
+  </div>
+  <div class="qr-hint">
+    📌 للحصول على رابط التحميل المباشر، تواصل معنا عبر البريد الإلكتروني
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>صُنع بـ❤️ لكل طفل يحلم بإتقان اللغة العربية — <strong>مشروع أنطق &copy; 2026</strong></p>
+</footer>
+
+</body>
+</html>
